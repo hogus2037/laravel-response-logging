@@ -1,0 +1,3 @@
+- 下载 `composer required hogus/laravel-response-logging`
+- 在路由中引入中间件 `middleware(Hogus\LaravelResponseLogging\Middleware\Report::class)`
+- log文件目录 storage/response/*.log
