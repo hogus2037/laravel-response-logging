@@ -19,6 +19,10 @@ class Report
     {
         $response = $next($request);
 
+        if (!config('response-logging.enable')) {
+            return $response;
+        }
+
         try {
             logs('response')->info($request->url(), [
                 'request' => [
@@ -28,7 +32,6 @@ class Report
                     'headers' => $request->header()
                 ],
                 'response' => [
-                    'headers' => $response->__toString(),
                     'content' => $response->getContent(),
                 ]
             ]);

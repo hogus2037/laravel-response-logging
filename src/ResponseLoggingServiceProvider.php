@@ -13,6 +13,22 @@ class ResponseLoggingServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__ .'/../config.php', 'logging.channels');
+        if (!$this->app->configurationIsCached()) {
+            $configPath = __DIR__.'/config.php';
+
+            $this->publishes([$configPath => config_path('response-logging.php')], 'config');
+
+            $this->mergeConfig('logging.channels');
+        }
+    }
+
+    protected function mergeConfig($key)
+    {
+        $config = $this->app->make('config');
+
+        $config->set($key, array_merge(
+            $config->get('response-logging.channels', []),
+            $config->get($key, []))
+        );
     }
 }
